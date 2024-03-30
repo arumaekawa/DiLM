@@ -1,0 +1,121 @@
+base:
+  experiment_name: train.${generator.model_name}.${learner.model_name}.${data.task_name}
+  method: text_gtn
+  run_name: ${base.method}.dc.${base.sub_run_name}
+  sub_run_name: ${now:%Y-%m-%d.%H-%M-%S}
+  save_dir_root: ./save
+  save_method_dir: ${base.save_dir_root}/${base.experiment_name}/${base.method}.dc
+  save_dir: ${base.save_method_dir}/${base.sub_run_name}
+  data_dir_root: ./data
+  seed: 42
+  device: null
+
+data:
+  task_name: sst2
+  datasets_path: ${base.data_dir_root}/${data.task_name}/datasets
+  preprocessed_datasets_path: ${base.data_dir_root}/${data.task_name}/datasets_${generator.model_name}_${learner.model_name}
+  train_batch_size: 64
+  valid_batch_size: 256
+  test_batch_size: 256
+  num_proc: 1
+  force_preprocess: False
+
+coreset:
+  coreset_type: k_centers # {random, k_centers, herding, rank_text_gtn}
+  model_name: bert-base-uncased
+  save_dir: ${base.data_dir_root}/${data.task_name}/coresets/${coreset.coreset_type}
+
+generator:
+  model_name: gpt2
+  pretrained_model_dir: null
+  checkpoint_name: null
+  top_p: 0.95
+  top_k: null
+  repetition_penalty: 1.0
+  generate_batch_size: 512
+  generate_max_length: null
+  generate_fp16: False
+  generate_bf16: True
+  gradient_checkpointing: True
+
+learner:
+  model_name: bert-base-uncased
+  use_pretrained_model: True
+  disable_dropout: False
+  freeze_bert: False
+  gradient_checkpointing: True
+
+train:
+  train_type: dc
+
+  gm_syn_dpc: 64
+  gm_real_dpc: 200
+  gm_real_grad_accum_step: 1
+
+  lm_lambda: 0.0
+  lm_batch_size: 64
+
+  repset_teacher: True
+  repset_dpc: ${train.gm_real_dpc}
+  n_repset: 10
+
+  classifier_grad_only: True
+
+  normalize_temperature: 1.0
+
+  n_clusters_for_real_sampler: 1
+  n_clusters_for_syn_sampler: ${train.gm_syn_dpc}
+  use_generated_data: True
+
+  total_train_step: 20000
+  inner_loop: 10 # 1 5 10 50
+  model_step_per_inner_step: 20
+
+  generate_dataset_interval: 20 # number of outer_loop
+
+  lr: 3.0e-7
+  optimizer_type: adamw # [sgd, adam, adamw]
+  scheduler_type: cosine
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  val_interval: 2000 # number of train_step
+  val_skip_step: 0
+  log_interval: 100 # number of train_step
+
+  save_model_dir: ${base.save_dir}/generator
+  save_valid_result_dir: ${base.save_dir}/valid_results
+  fp16: False
+  bf16: True
+
+distilled_data:
+  dpc: 20
+  n_dataset: 10
+  save_dataset_path: ${base.save_dir}/dataset
+  over_sample_ratio: 100.0
+
+evaluate:
+  task_name: ${data.task_name}
+  n_eval_per_dataset: 5
+  fp16: False
+  bf16: True
+  save_result_dir: ${base.save_dir}/final_results
+
+  # training config
+  optimizer_type: adamw # ["sgd", "momentum", "adam", "adamw"]
+  scheduler_type: cosine
+  lr: 1.0e-4
+  max_grad_norm: 1.0
+  weight_decay: 0.01
+  warmup_ratio: 0.5
+
+  train_step: 200
+  batch_size: 64
+
+hydra:
+  run:
+    dir: ${base.save_dir}
+  sweep:
+    dir: ${base.save_method_dir}
+    subdir: ${base.sub_run_name}

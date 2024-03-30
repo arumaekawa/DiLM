@@ -1,0 +1,80 @@
+base:
+  experiment_name: test.${learner.model_name}.${data.task_name}
+  method: coreset
+  run_name: ${base.method}.${coreset.coreset_type}.${base.sub_run_name}
+  sub_run_name: dpc_${distilled_data.dpc}
+  save_dir_root: ./save
+  save_method_dir: ${base.save_dir_root}/${base.experiment_name}/${base.method}.${coreset.coreset_type}
+  save_dir: ${base.save_method_dir}/${base.sub_run_name}
+  data_dir_root: ./data
+  seed: 42
+  device: null
+
+data:
+  task_name: sst2
+  datasets_path: ${base.data_dir_root}/${data.task_name}/datasets
+  preprocessed_datasets_path: ${base.data_dir_root}/${data.task_name}/datasets_${generator.model_name}_${learner.model_name}
+  train_batch_size: 64
+  valid_batch_size: 256
+  test_batch_size: 256
+  num_proc: 1
+  force_preprocess: False
+
+coreset:
+  coreset_type: random # {random, k_centers, herding, rank_text_gtn}
+  model_name: bert-base-uncased
+  save_dir: ${base.data_dir_root}/${data.task_name}/coresets/${coreset.coreset_type}
+
+generator:
+  model_name: gpt2
+  pretrained_model_dir: null
+  checkpoint_name: null
+  top_p: 0.95
+  top_k: null
+  repetition_penalty: 1.0
+  generate_batch_size: 512
+  generate_max_length: null
+  generate_fp16: False
+  generate_bf16: True
+  gradient_checkpointing: True
+
+learner:
+  model_name: bert-base-uncased
+  few_shot: ${evaluate.few_shot}
+  use_pretrained_model: True
+  disable_dropout: False
+  freeze_bert: False
+  gradient_checkpointing: True
+
+distilled_data:
+  dpc: 20
+  n_dataset: 20
+  save_dataset_path: ${base.save_dir}/dataset
+  over_sample_ratio: 1.0
+
+evaluate:
+  task_name: ${data.task_name}
+  n_eval_per_dataset: 5
+  fp16: False
+  bf16: True
+  save_result_dir: ${base.save_dir}/final_results
+
+  # training config
+  few_shot: False
+
+  optimizer_type: adamw # ["sgd", "momentum", "adam", "adamw"]
+  scheduler_type: cosine
+  lr: 1.0e-4
+  max_grad_norm: 1.0
+  weight_decay: 0.01
+  warmup_ratio: 0.5
+
+  train_step: 200
+  batch_size: 64
+
+hydra:
+  run:
+    dir: ${base.save_dir}
+  sweep:
+    dir: ${base.save_method_dir}
+    subdir: ${base.sub_run_name}

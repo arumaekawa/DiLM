@@ -1,0 +1,7 @@
+mlruns/
+save/
+data/
+analysis/
+
+.vscode/
+__pycache__/
