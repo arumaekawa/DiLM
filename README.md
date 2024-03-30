@@ -76,8 +76,15 @@ Datasets and pre-trained models are downloaded and used with [Hugging Face](http
    ```
 
 4. Run evaluation
+
    ```bash
     $ python src/test.py --config-name=dc data.task_name=sst2 generator.pretrained_model_dir=path/to/pretrained_model_dir
+   ```
+
+5. Check the results with MLFlow (http://localhost:5000)
+
+   ```bash
+    $ mlflow server --backend-store-uri ./mlruns --host 0.0.0.0 --port 5000
    ```
 
 ## Citation
