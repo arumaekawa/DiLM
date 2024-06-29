@@ -21,7 +21,7 @@ data:
   force_preprocess: False
 
 coreset:
-  coreset_type: random # {random, k_centers, herding, rank_text_gtn}
+  coreset_type: random # {random, k_centers, herding, rank_dilm}
   model_name: bert-base-uncased
   save_dir: ${base.data_dir_root}/${data.task_name}/coresets/${coreset.coreset_type}
 

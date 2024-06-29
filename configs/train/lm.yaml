@@ -1,6 +1,6 @@
 base:
   experiment_name: train.${generator.model_name}.${learner.model_name}.${data.task_name}
-  method: text_gtn
+  method: dilm
   run_name: ${base.method}.lm.${base.sub_run_name}
   sub_run_name: step_${train.total_train_step}
   save_dir_root: ./save
@@ -21,7 +21,7 @@ data:
   force_preprocess: False
 
 coreset:
-  coreset_type: k_centers # {random, k_centers, herding, rank_text_gtn}
+  coreset_type: k_centers # {random, k_centers, herding, rank_dilm}
   model_name: bert-base-uncased
   save_dir: ${base.data_dir_root}/${data.task_name}/coresets/${coreset.coreset_type}
 

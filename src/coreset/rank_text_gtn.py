@@ -11,7 +11,7 @@ from .coreset_utils import batch_to_cuda
 logger = logging.getLogger(__name__)
 
 
-def rank_with_text_gtn(
+def rank_with_dilm(
     dataset: Dataset, dpc: int, generator: GeneratorModel, sentence_keys: list[str]
 ):
     generator.cuda()

@@ -12,7 +12,7 @@ from generator import GeneratorModel
 from .herding import herding
 from .k_centers import k_centers
 from .random import random_selection
-from .rank_text_gtn import rank_with_text_gtn
+from .rank_dilm import rank_with_dilm
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ ENCODER_MODEL_REQUIRED_METHODS = {"k_centers", "herding"}
 
 @dataclass
 class CoresetConfig:
-    coreset_type: str = "random"  # random, k_centers, text_gtn
+    coreset_type: str = "random"  # random, k_centers, dilm
     model_name: str = "bert-base-uncased"  # for embedding based method
     save_dir: str = "dataset/save/directory"
 
@@ -40,7 +40,7 @@ class CoresetModule:
         self.num_labels = DATASET_ATTRS[task_name]["num_labels"]
         self.dataset = dataset
 
-        assert config.coreset_type != "rank_text_gtn" or generator is not None
+        assert config.coreset_type != "rank_dilm" or generator is not None
         self.generator = generator
 
         if config.coreset_type in ENCODER_MODEL_REQUIRED_METHODS:
@@ -110,9 +110,9 @@ class CoresetModule:
                 tokenizer=self.encoder_tokenizer,
                 sentence_keys=DATASET_ATTRS[self.task_name]["sentence_keys"],
             )
-        elif self.config.coreset_type == "rank_text_gtn":
+        elif self.config.coreset_type == "rank_dilm":
             assert self.generator is not None
-            return rank_with_text_gtn(
+            return rank_with_dilm(
                 dataset,
                 dpc=dpc,
                 generator=self.generator,

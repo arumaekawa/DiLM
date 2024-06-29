@@ -36,7 +36,7 @@ Datasets and pre-trained models are downloaded and used with [Hugging Face](http
 │  │  ├── herding.py
 │  │  ├── k_centers.py
 │  │  ├── random.py
-│  │  └── rank_text_gtn.py
+│  │  └── rank_dilm.py
 │  ├── distillation
 │  │  ├── __init__.py
 │  │  ├── distilled_data.py

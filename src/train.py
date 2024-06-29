@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BaseConfig:
     experiment_name: str
-    method: str  # "text_gtn" or "coreset"
+    method: str  # "dilm" or "coreset"
     run_name: str
     save_dir_root: str
     save_method_dir: str
@@ -105,14 +105,14 @@ def main(config: Config):
     # Evaluator
     evaluator = Evaluator(config.evaluate, task_name=config.data.task_name)
 
-    assert config.base.method == "text_gtn"
+    assert config.base.method == "dilm"
 
     # Build coreset module
     coreset_module = CoresetModule(
         config.coreset,
         config.data.task_name,
         dataset=data_module.datasets["train"],
-        generator=generator if config.coreset.coreset_type == "rank_text_gtn" else None,
+        generator=generator if config.coreset.coreset_type == "rank_dilm" else None,
     )
 
     # Train generator

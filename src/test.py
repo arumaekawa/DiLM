@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BaseConfig:
     experiment_name: str
-    method: str  # "text_gtn" or "coreset"
+    method: str  # "dilm" or "coreset"
     run_name: str
     run_name: str
     save_dir_root: str
@@ -120,8 +120,8 @@ def main(config: Config):
             dataset_list.append(Dataset.from_json(save_path))
 
     else:
-        if config.base.method == "text_gtn":
-            # Text-GTN
+        if config.base.method == "dilm":
+            # DiLM
             assert config.generator.pretrained_model_dir is not None
 
             # Build coreset module
@@ -130,7 +130,7 @@ def main(config: Config):
                 config.data.task_name,
                 dataset=data_module.datasets["train"],
                 generator=generator
-                if config.coreset.coreset_type == "rank_text_gtn"
+                if config.coreset.coreset_type == "rank_dilm"
                 else None,
             )
 
@@ -157,7 +157,7 @@ def main(config: Config):
                 config.data.task_name,
                 dataset=data_module.datasets["train"],
                 generator=generator
-                if config.coreset.coreset_type == "rank_text_gtn"
+                if config.coreset.coreset_type == "rank_dilm"
                 else None,
             )
             dataset_list = coreset_module.generate_dataset(

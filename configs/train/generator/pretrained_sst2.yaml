@@ -1,2 +1,2 @@
-pretrained_model_dir: save/train.gpt2.bert-base-uncased.sst2/text_gtn.lm/step_80000/generator
+pretrained_model_dir: save/train.gpt2.bert-base-uncased.sst2/dilm.lm/step_80000/generator
 checkpoint_name: last-ckpt
