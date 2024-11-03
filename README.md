@@ -4,7 +4,7 @@ Implementaiton of "DiLM: Distilling Dataset into Language Model for Text-level D
 
 **Abstract**: Dataset distillation aims to compress a training dataset by creating a small number of informative synthetic samples such that neural networks trained on them perform as well as those trained on the original training dataset. Current text dataset distillation methods create each synthetic sample as a sequence of word embeddings instead of a text to apply gradient-based optimization; however, such embedding-level distilled datasets cannot be used for training other models whose word embedding weights are different from the model used for distillation. To address this issue, we propose a novel text dataset distillation approach, called Distilling dataset into Language Model (DiLM), which trains a language model to generate informative synthetic training samples as text data, instead of directly optimizing synthetic samples. We evaluated DiLM on various text classification datasets and showed that distilled synthetic datasets from DiLM outperform those from current coreset selection methods. DiLM achieved remarkable generalization performance in training different types of models and in-context learning of large language models. Our code will be available at https://github.com/arumaekawa/DiLM.
 
-**Paper**: [arXiv], [NAACL2024 Findings]
+**Paper**: [[arXiv](https://arxiv.org/abs/2404.00264)], [[NAACL2024 Findings](https://aclanthology.org/2023.acl-short.12/)]
 
 ## Contents
 
