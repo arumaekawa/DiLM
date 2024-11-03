@@ -90,5 +90,22 @@ Datasets and pre-trained models are downloaded and used with [Hugging Face](http
 ## Citation
 
 ```
-TBW
+@inproceedings{maekawa-etal-2023-dataset,
+    title = "Dataset Distillation with Attention Labels for Fine-tuning {BERT}",
+    author = "Maekawa, Aru  and
+      Kobayashi, Naoki  and
+      Funakoshi, Kotaro  and
+      Okumura, Manabu",
+    editor = "Rogers, Anna  and
+      Boyd-Graber, Jordan  and
+      Okazaki, Naoaki",
+    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.acl-short.12",
+    doi = "10.18653/v1/2023.acl-short.12",
+    pages = "119--127",
+}
 ```
